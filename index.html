@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Leave a Tip Meme</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: #fff;
+    }
+
+    .container {
+      text-align: center;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    h2 {
+      color: #1a4a7a;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
+
+    .tip-btn {
+      flex: 1;
+      background: #2a6fb0;
+      border: none;
+      color: #fff;
+      padding: 18px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    #tip25 {
+      flex: 1;
+      background: #2a6fb0;
+      font-size: 16px;
+      padding: 18px;
+      transition: transform 0.2s ease;
+      transform: scale(var(--grow, 1));
+    }
+
+    .big-btn {
+      display: block;
+      width: 100%;
+      margin-top: 12px;
+      background: #2a6fb0;
+      font-size: 18px;
+      padding: 20px;
+    }
+
+    .tip-btn:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Leave a tip?</h2>
+    <div class="options">
+      <button class="tip-btn" data-value="15">15%<br>THANKS</button>
+      <button class="tip-btn" data-value="20">20%<br>JUST THE TIP</button>
+      <button id="tip25" class="tip-btn" data-value="25">25%<br>BLOW MY BACK OUT</button>
+    </div>
+    <button class="tip-btn big-btn">HERE'S A TIP FOR YA!</button>
+  </div>
+
+  <script>
+    (function(){
+      const buttons = Array.from(document.querySelectorAll('.tip-btn'));
+      const tip25 = document.getElementById('tip25');
+      let growCount = 0;
+      const growStep = 0.15;
+      const maxScale = 3.0;
+
+      function update25Scale(){
+        const scale = Math.min(1 + growCount * growStep, maxScale);
+        document.documentElement.style.setProperty('--grow', scale);
+      }
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          if(btn !== tip25){
+            growCount++;
+            update25Scale();
+          } else {
+            tip25.animate([
+              { transform: `scale(${getComputedStyle(document.documentElement).getPropertyValue('--grow')})` },
+              { transform: `scale(${Math.min(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--grow')) + 0.2, maxScale)})` },
+              { transform: `scale(${getComputedStyle(document.documentElement).getPropertyValue('--grow')})` }
+            ], { duration: 260, easing: 'cubic-bezier(.2,.9,.2,1)' });
+          }
+        });
+      });
+
+      update25Scale();
+    })();
+  </script>
+</body>
+</html>
